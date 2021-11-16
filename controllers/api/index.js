@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const Workout = require('../../models/Workout');
 
 // Get last workout
 router.get('/workouts', async (req, res) => {
