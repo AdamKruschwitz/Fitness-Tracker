@@ -1,7 +1,8 @@
-const { response } = require('express');
+const router = require('express').Router();
+const api = require('./api');
 const path = require('path');
 
-const router = require('express').Router();
+router.use('/api', api);
 
 router.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../public/index.html'));
