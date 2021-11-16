@@ -8,7 +8,7 @@ const workoutSchema = new Schema({
         default: Date.now,
     },
     exercises: {
-        type: Object
+        type: mongoose.SchemaTypes.Mixed,
     }
 });
 
