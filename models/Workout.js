@@ -9,6 +9,7 @@ const workoutSchema = new Schema({
     },
     exercises: {
         type: mongoose.SchemaTypes.Mixed,
+        default: [],
     }
 });
 

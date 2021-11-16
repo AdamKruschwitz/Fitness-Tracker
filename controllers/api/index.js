@@ -23,8 +23,11 @@ router.put('/workouts/:id', async (req, res) => {
         // get the workout
         const workout = await Workout.findOne({"_id": new ObjectId(req.params.id)});
         if(workout) {
-            if(!workout.exercises) workout.exercises = [];
             workout.exercises.push(req.body);
+            workout.markModified("exercises");
+            console.log(workout);
+            const workoutResult = await workout.save();
+            console.log(workoutResult);
             res.status(200).json(workout);
         } else {
             res.status(404).json({response: "That workout doesn't exist :("});
@@ -47,6 +50,7 @@ router.post('/workouts', async (req, res) => {
 });
 
 // Get workouts in range (no range specified, present all workouts)
+// Needs: 
 router.get('/workouts/range', async (req, res) => {
     try {
         const workouts = await Workout.find();
