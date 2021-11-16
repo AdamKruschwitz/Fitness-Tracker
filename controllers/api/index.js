@@ -48,7 +48,12 @@ router.post('/workouts', async (req, res) => {
 
 // Get workouts in range (no range specified, present all workouts)
 router.get('/workouts/range', async (req, res) => {
-    // TODO
+    try {
+        const workouts = await Workout.find();
+        res.status(200).json(workouts);
+    } catch (err) {
+        res.status(500).json({response: "Something went wrong :(", error: err});
+    }
 });
 
 module.exports = router;
