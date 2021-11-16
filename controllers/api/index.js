@@ -64,7 +64,13 @@ router.post('/workouts', async (req, res) => {
 // TODO Needs: totalDuration
 router.get('/workouts/range', async (req, res) => {
     try {
-        const workouts = await Workout.find().sort({ day: -1 });
+        const aggregatedWorkout = await Workout.aggregate([
+            {
+                $addFields: {
+                    totalDuration: { $sum: "$exercises.duration"}
+                }
+            }
+        ]).sort({ day: -1 });
         res.status(200).json(workouts);
     } catch (err) {
         res.status(500).json({response: "Something went wrong :(", error: err});
