@@ -3,9 +3,11 @@ const Workout = require('../../models/Workout');
 const ObjectId = require('mongoose').Types.ObjectId;
 
 // Get last workout
+// TODO: Date is reading as invalid
+// TODO: add total workout duration
 router.get('/workouts', async (req, res) => {
     try{
-        const lastWorkout = await Workout.findOne({}).sort({ date: -1 }).limit(1);
+        const lastWorkout = await Workout.find().sort({ date: -1 }).limit(1);
         if(lastWorkout) {
             res.status(200).json(lastWorkout);
         } else {
@@ -25,9 +27,9 @@ router.put('/workouts/:id', async (req, res) => {
         if(workout) {
             workout.exercises.push(req.body);
             workout.markModified("exercises");
-            console.log(workout);
+            // console.log(workout);
             const workoutResult = await workout.save();
-            console.log(workoutResult);
+            // console.log(workoutResult);
             res.status(200).json(workout);
         } else {
             res.status(404).json({response: "That workout doesn't exist :("});
@@ -50,7 +52,7 @@ router.post('/workouts', async (req, res) => {
 });
 
 // Get workouts in range (no range specified, present all workouts)
-// Needs: 
+// TODO Needs: totalDuration
 router.get('/workouts/range', async (req, res) => {
     try {
         const workouts = await Workout.find();
