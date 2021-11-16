@@ -7,9 +7,18 @@ const ObjectId = require('mongoose').Types.ObjectId;
 // TODO: add total workout duration
 router.get('/workouts', async (req, res) => {
     try{
-        const lastWorkout = await Workout.find().sort({ date: -1 }).limit(1);
-        if(lastWorkout) {
-            res.status(200).json(lastWorkout);
+        // const lastWorkout = await Workout.find().sort({ date: -1 }).limit(1);
+        const aggregatedWorkout = await Workout.aggregate([
+            {
+                $addFields: {
+                    totalDuration: { $sum: "$exercises.duration"}
+                }
+            }
+        ]).sort({ day: -1 }).limit(1);
+        // console.log(aggregatedWorkout);
+        if(aggregatedWorkout) {
+            
+            res.status(200).json(aggregatedWorkout);
         } else {
             res.status(404).json({ response: "There are no workouts :("});
         }
@@ -55,7 +64,7 @@ router.post('/workouts', async (req, res) => {
 // TODO Needs: totalDuration
 router.get('/workouts/range', async (req, res) => {
     try {
-        const workouts = await Workout.find();
+        const workouts = await Workout.find().sort({ day: -1 });
         res.status(200).json(workouts);
     } catch (err) {
         res.status(500).json({response: "Something went wrong :(", error: err});
